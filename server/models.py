@@ -1,7 +1,6 @@
 from app import db
 from sqlalchemy.dialects.postgresql import JSON
 
-
 class Accel(db.Model):
     __tablename__ = 'accel'
 
@@ -12,10 +11,10 @@ class Accel(db.Model):
     timestamp = db.Column(db.Float())
 
     def __repr__(self):
-        return '<id {}>'.format(self.id)
+        return 'Accel<id {}>'.format(self.id)
 
 class Gyro(db.Model):
-    __tablename__ = 'accel'
+    __tablename__ = 'gyro'
 
     id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Float())
@@ -24,4 +23,4 @@ class Gyro(db.Model):
     timestamp = db.Column(db.Float())
 
     def __repr__(self):
-        return '<id {}>'.format(self.id)
+        return 'Gyro<id {}>'.format(self.id)

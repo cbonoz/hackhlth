@@ -48,6 +48,7 @@ def parse_accel():
         print(data)
         data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
         db.session.add_all(data)
+        db.session.commit()
 
         return jsonify({'inserted': len(data)})
     except Exception as e:
@@ -62,6 +63,7 @@ def parse_gyro():
         data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
         print(data)
         db.session.add_all(data)
+        db.session.commit()
 
         return jsonify({'inserted': len(data)})
     except Exception as e:

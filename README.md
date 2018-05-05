@@ -32,7 +32,10 @@ App allows insight into behavior outside of direct parental or clinician attenti
 ### Dev Notes
 
 ### Useful Libaries
-https://github.com/Pr0Ger/PyAPNs2
+* https://github.com/Pr0Ger/PyAPNs2
+* http://sqlalchemy-utils.readthedocs.io/en/latest/range_data_types.html
+* http://flask-sqlalchemy.pocoo.org/2.3/quickstart/
+
 
 
 

@@ -49,7 +49,7 @@ def parse_accel():
         data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
         db.session.add_all(data)
 
-        return jsonify({'data': len(data)})
+        return jsonify({'inserted': len(data)})
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -63,7 +63,7 @@ def parse_gyro():
         print(data)
         db.session.add_all(data)
 
-        return jsonify({'data': len(data)})
+        return jsonify({'inserted': len(data)})
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -74,26 +74,34 @@ GET REQUESTS
 
 @app.route('/accel')
 def get_accel():
-    # from query string
-    start_time = request.args.get('startTime')
-    end_time = request.args.get('endTime')
+    try:
+        # from query string
+        start_time = request.args.get('startTime')
+        end_time = request.args.get('endTime')
 
-    data = db.session.query(Accel).filter(
-        Accel.timestamp >= start_time and Accel.timestamp <= end_time
-    )
-    print(data)
-    return jsonify({data: len(data)})
+        data = db.session.query(Accel).filter(
+            Accel.timestamp >= start_time and Accel.timestamp <= end_time
+        )
+        print(data)
+        return jsonify({'data': data})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/gyro')
 def get_gyro():
-    # from query string
-    start_time = request.args.get('startTime')
-    end_time = request.args.get('endTime')
-    data = db.session.query(Gyro).filter(
-        Gyro.timestamp >= start_time and Gyro.timestamp <= end_time
-    )
-    print(data)
-    return jsonify({data: len(data)})
+    try:
+        # from query string
+        start_time = request.args.get('startTime')
+        end_time = request.args.get('endTime')
+        data = db.session.query(Gyro).filter(
+            Gyro.timestamp >= start_time and Gyro.timestamp <= end_time
+        )
+        print(data)
+        return jsonify({'data': data})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/accel/all')
 def get_accel_all():

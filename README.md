@@ -39,11 +39,11 @@ post_data = {
     'userId': XXXXXXXXXX,
     'data': [
         {
-            'userId': my_uuid,
-            'x': 1,
-            'y': 2,
-            'z': 3,
-            'timestamp': int(time.time())
+            'userId': XXXXXXXXXX // user id code
+            'x': 1, // floating point value
+            'y': 2, // floating point value
+            'z': 3, // floating point value
+            'timestamp': XXXXXXXXX // (timestamp in ms)
         },
         ...
     ]

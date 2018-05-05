@@ -31,6 +31,40 @@ App allows insight into behavior outside of direct parental or clinician attenti
 
 ### Dev Notes
 
+#### Uploading data
+
+The POST endpoints for `/accel` and `/gyro` expect lists of data entries in the following body format.
+<pre>
+post_data = {
+    'userId': XXXXXXXXXX,
+    'data': [
+        {
+            'userId': my_uuid,
+            'x': 1,
+            'y': 2,
+            'z': 3,
+            'timestamp': int(time.time())
+        },
+        ...
+    ]
+}
+</pre>
+
+#### Retrieving time-windowed data
+The GET endpoints for `/accel` and `/gyro` expect the following query params:
+`startTime=<timestampMS>`
+`endTime=<timestampMS>`
+`userId=<userId>`
+
+#### Retrieving all data
+
+There are also GET endpoints for all data:<br/>
+* `/accel/all`
+* `/gyro/all`
+* `/stim/all`
+
+with a userId query param.
+
 ### Useful Libaries
 * https://github.com/Pr0Ger/PyAPNs2
 * http://sqlalchemy-utils.readthedocs.io/en/latest/range_data_types.html

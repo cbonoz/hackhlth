@@ -84,8 +84,8 @@ def get_accel():
         data = db.session.query(Accel).filter(
             Accel.timestamp >= start_time and Accel.timestamp <= end_time
         )
-        print(data)
-        return jsonify({'data': data})
+        records = [i.serialize for i in data]
+        return jsonify(data = records)
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -99,8 +99,8 @@ def get_gyro():
         data = db.session.query(Gyro).filter(
             Gyro.timestamp >= start_time and Gyro.timestamp <= end_time
         )
-        print(data)
-        return jsonify({'data': data})
+        records = [i.serialize for i in data]
+        return jsonify(data = records)
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -109,7 +109,8 @@ def get_gyro():
 def get_accel_all():
     try:
         data = Accel.query.all()
-        return jsonify({'data': data})
+        records = [i.serialize for i in data]
+        return jsonify(data = records)
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -118,7 +119,8 @@ def get_accel_all():
 def get_gyro_all():
     try:
         data = Gyro.query.all()
-        return jsonify({'data': data})
+        records = [i.serialize for i in data]
+        return jsonify(data = records)
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -130,7 +132,8 @@ def get_stim_all():
         response = softheon.get_stim_events({'userId': userId})
         data = response.text
         print(data)
-        return jsonify({'data': data})
+        records = [i.serialize for i in data]
+        return jsonify(data = records)
     except Exception as e:
         print(e)
         return jsonify(e)

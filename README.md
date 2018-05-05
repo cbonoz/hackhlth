@@ -29,7 +29,7 @@ Clinician can review data. Parent has the opportunity to take action if there's 
 App doesn't do diagnosing or dosing.
 App allows insight into behavior outside of direct parental or clinician attention. No potential harm 
 
-### Dev Notes
+### Server (API) Notes
 
 #### Uploading data
 
@@ -64,6 +64,9 @@ There are also GET endpoints for all data:<br/>
 * `/stim/all`
 
 with a userId query param.
+
+
+### Dev Notes
 
 ### Useful Libaries
 * https://github.com/Pr0Ger/PyAPNs2

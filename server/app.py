@@ -80,9 +80,8 @@ def get_accel():
         # from query string
         start_time = request.args.get('startTime')
         end_time = request.args.get('endTime')
-
         data = db.session.query(Accel).filter(
-            Accel.timestamp >= start_time and Accel.timestamp <= end_time
+            (Accel.timestamp >= start_time) & (Accel.timestamp <= end_time)
         )
         records = [i.serialize for i in data]
         return jsonify(data = records)
@@ -97,7 +96,7 @@ def get_gyro():
         start_time = request.args.get('startTime')
         end_time = request.args.get('endTime')
         data = db.session.query(Gyro).filter(
-            Gyro.timestamp >= start_time and Gyro.timestamp <= end_time
+            (Gyro.timestamp >= start_time) & (Gyro.timestamp <= end_time)
         )
         records = [i.serialize for i in data]
         return jsonify(data = records)

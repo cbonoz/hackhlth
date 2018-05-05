@@ -8,19 +8,30 @@ class Softheon:
         self.client_id = client_id
         self.client_secret = client_secret
         self.scopes = scopes
+        self.access_token = None
         return
 
-    def send_stim_event(self, data, access_token):
+    def get_stim_events(self, data):
+        """
+        Get stim events for a provided user id.
+        :param data: {userId: ...}
+        :return: api response containing list of stimming events associated with the given user id {userId: ..., data: [...]}
+        """
+        # TODO: implement
+
+        response = []
+        return response
+
+    def send_stim_event(self, data):
         """
         Send autistic stimming event to the softheon server for secure storage and recording.
-        :param data: array of data
-        :param type: oneof "accel" or "gyro"
+        :param data: {userId: ..., data: [...]}
         :return: Softheon API response
         """
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer %s' % access_token,
+            'Authorization': 'Bearer %s' % self.access_token,
         }
 
         response = requests.post('https://hack.softheon.io/api/enterprise/v1/content/entities/2', headers=headers, data=data)

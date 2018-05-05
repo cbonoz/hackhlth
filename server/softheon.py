@@ -1,3 +1,4 @@
+import os
 import requests
 
 # https://curl.trillworks.com/

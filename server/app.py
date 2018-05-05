@@ -1,7 +1,6 @@
 from flask import Flask, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
-from sqlalchemy import create_engine
 
 DB_USER = os.environ['STIM_DB_USER']
 DB_PASS = os.environ['STIM_DB_PASS']
@@ -22,7 +21,7 @@ db = SQLAlchemy(app)
 # from models import Accel, Gyro
 from softheon import Softheon
 
-scopes = ""
+scopes = "enterpriseapi" #openid
 print('softheon info', softheon_client, softheon_secret)
 
 softheon = Softheon(softheon_client, softheon_secret, scopes)
@@ -37,17 +36,20 @@ POST REQUESTS
 
 @app.route('/accel', methods=['POST'])
 def parse_accel():
-    data = request.data
+    body = request.data
+    data = body['data']
     print(data)
-    softheon.send_data(data, "accel")
+    # TODO: save to accel DB.
 
     return jsonify({data: len(data)})
 
 @app.route('/gyro', methods=['POST'])
 def parse_gyro():
-    data = request.data
+    body = request.data
+    data = body['data']
     print(data)
-    softheon.send_data(data, "gyro")
+    # TODO: save to gyro DB.
+
     return jsonify({data: len(data)})
 
 """

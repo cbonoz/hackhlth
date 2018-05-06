@@ -8,10 +8,11 @@ class NotificationService:
     def __init__(self):
         self.topic = 'com.epage.QuietMind'
         self.token_map = {}
-        self.client = APNsClient('key.pem', use_sandbox=False, use_alternative_port=False)
+        self.client = APNsClient('./apns-dev.pem', use_sandbox=False, use_alternative_port=False)
 
-    def register_token(self, userId, token_file):
-        self.token_map[userId] = token_file
+    def register_token(self, userId, token):
+        print('register notification token', userId, token)
+        self.token_map[userId] = token
 
     def get_token(self, userId):
         if userId in self.token_map:

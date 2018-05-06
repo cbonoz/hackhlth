@@ -14,5 +14,5 @@ class NotificationService:
 
     def send_notification(self, message="Hello World!"):
         payload = Payload(alert=message, sound="default", badge=1)
-        self.client.send_notification(self.token_hex, payload, self.topic)
+        # self.client.send_notification(self.token_hex, payload, self.topic)
         print('send notification payload', payload)

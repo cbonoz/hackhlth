@@ -133,7 +133,7 @@ class Predict:
             text = "Ok"
         print('Current Stimming Status: ' + color + '%s' % text)
         if pred:
-            print(Fore.RED + "Stimming detected for user (%s)\nEntry created in softheon DB." % userId)
+            print(Fore.RED + "Stimming detected for user (%s)" % userId)
 
         print(Style.RESET_ALL)
         self.last_prediction[userId] = pred

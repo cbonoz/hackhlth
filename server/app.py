@@ -104,9 +104,10 @@ def parse_data():
             inserted = 0
 
         test_data = predict.process_data(accel, gyro)
+        new_stim = predict.is_new_stim(userId)
         prediction = predict.predict_stim(userId, test_data)
-
-        if prediction and predict.is_new_stim(userId): # if we just had an upward spike
+        print('new_stim', new_stim)
+        if prediction and new_stim: # if we just had an upward spike
             # We had a stimming event detection, record to softheon using the current time of detection.
             detection_time = int(time.time())
             try:
@@ -115,7 +116,8 @@ def parse_data():
                 # Auth token likely expired, but try again.
                 softheon.get_auth_token()
                 response = softheon.send_stim_event(userId, detection_time)
-            ns.send_notification(userId, "Detected Stim Event: %d" + detection_time)
+            print("Entry created in softheon DB")
+            ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
 
         return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:
@@ -154,6 +156,19 @@ def parse_gyro():
 """
 GET REQUESTS
 """
+
+@app.route('/status')
+def get_status():
+    try:
+        # from query string
+        userId = request.args.get('userId')
+        val = 0
+        if userId in predict.last_prediction:
+            val = predict.last_prediction[userId] + 0
+        return jsonify({'status':val})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/register')
 def get_register():

@@ -149,7 +149,7 @@ GET REQUESTS
 """
 
 @app.route('/register')
-def get_accel():
+def get_register():
     try:
         # from query string
         userId = request.args.get('userId')

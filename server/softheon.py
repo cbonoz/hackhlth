@@ -46,7 +46,7 @@ class Softheon:
             print('error', e)
             return {'error': e}
 
-    def create_entity(self, type=160):
+    def create_stim_entity(self, type=160):
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer %s' % self.access_token

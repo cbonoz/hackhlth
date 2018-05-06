@@ -6,6 +6,7 @@ class Accel(db.Model):
     __tablename__ = 'accel'
 
     id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
     x = db.Column(db.Float())
     y = db.Column(db.Float())
     z = db.Column(db.Float())
@@ -13,15 +14,16 @@ class Accel(db.Model):
 
     @property
     def serialize(self):
-        return {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
+        return {'x': self.x, 'y': self.y, 'z': self.z, 'userId':self.userId, 'timestamp': int(self.timestamp)}
 
     def __repr__(self):
-        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
+        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'userId':self.userId, 'timestamp': int(self.timestamp)}
 
 class Gyro(db.Model):
     __tablename__ = 'gyro'
 
     id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
     x = db.Column(db.Float())
     y = db.Column(db.Float())
     z = db.Column(db.Float())
@@ -29,7 +31,7 @@ class Gyro(db.Model):
 
     @property
     def serialize(self):
-        return {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
+        return {'x': self.x, 'y': self.y, 'z': self.z, 'userId':self.userId, 'timestamp': int(self.timestamp)}
 
     def __repr__(self):
-        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
+        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'userId':self.userId, 'timestamp': int(self.timestamp)}

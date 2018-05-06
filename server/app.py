@@ -1,8 +1,20 @@
 from flask import Flask, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
+from softheon import Softheon
+from predict import Predict
+from notification import NotificationService
+from models import *
+
+from colorama import Fore, Back, Style
+from colorama import init
+init()
+
 
 import os
 import json
+import time
 
 DB_USER = os.environ['STIM_DB_USER']
 DB_PASS = os.environ['STIM_DB_PASS']
@@ -20,22 +32,15 @@ app = Flask(__name__)
 # app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_STRING
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
+
 db = SQLAlchemy(app)
-
-from models import *
-
-from softheon import Softheon
-from predict import Predict
-from notification import NotificationService
 
 db.create_all()
 
-scopes = "enterpriseapi,openid"
-print('softheon info', softheon_client, softheon_secret)
-
 predict = Predict()
 ns = NotificationService()
-softheon = Softheon(softheon_client, softheon_secret, scopes)
+softheon = Softheon(softheon_client, softheon_secret)
 
 
 @app.route('/')
@@ -65,43 +70,54 @@ def parse_data():
         except KeyError as e:
             userId = '1'
 
+        type = None
         try:
             type = body['type']
             # there is a type declared
             fd = open('./ml/data/accel_data_%s.txt' % type,'a')
-            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), accel)))
+            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), accel))) + "\n"
             fd.write(text)
             fd.close()
 
             fd = open('./ml/data/gyro_data_%s.txt' % type,'a')
-            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), gyro)))
+            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), gyro))) + "\n"
             fd.write(text)
             fd.close()
 
         except KeyError as e:
-            print('no type declared - not training')
+            print('no type declared - not training, in live mode.')
+            type = None
 
-        print('insert', insert, 'userId', userId, 'accel', len(accel), 'gyro', len(gyro))
+        print('insert', insert, 'userId', userId, 'accel', len(accel), 'gyro', len(gyro), 'type', type)
 
         # See if the data should be inserted as well.
-        if insert == True:
-            accel = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), accel))
-            db.session.add_all(accel)
+        if insert:
+            accel_data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), accel))
+            db.session.add_all(accel_data)
+            db.session.commit()
 
-            gyro = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), gyro))
-            db.session.add_all(gyro)
+            gyro_data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), gyro))
+            db.session.add_all(gyro_data)
+            db.session.commit()
+            inserted = len(accel) + len(gyro)
+        else:
+            inserted = 0
 
         test_data = predict.process_data(accel, gyro)
-        prediction = predict.predict_stim(test_data)
+        prediction = predict.predict_stim(userId, test_data)
 
-        if prediction:
+        if prediction and predict.is_new_stim(userId): # if we just had an upward spike
             # We had a stimming event detection, record to softheon using the current time of detection.
             detection_time = int(time.time())
-            softheon.send_stim_event(userId, detection_time)
-            ns.send_notification("Detected Stim Event")
+            try:
+                softheon.send_stim_event(userId, detection_time)
+            except Exception as e:
+                # Auth token likely expired, but try again.
+                softheon.get_auth_token()
+                response = softheon.send_stim_event(userId, detection_time)
+            ns.send_notification(userId, "Detected Stim Event: %d" + detection_time)
 
-        db.session.commit()
-        return jsonify({'inserted': len(accel) + len(gyro), 'prediction': prediction})
+        return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:
         print(e)
         return jsonify(e)
@@ -112,7 +128,7 @@ def parse_accel():
         body = json.loads(request.data)
         data = body['data']
         print(data)
-        data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
+        data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), data))
         db.session.add_all(data)
         db.session.commit()
 
@@ -126,7 +142,7 @@ def parse_gyro():
     try:
         body = json.loads(request.data)
         data = body['data']
-        data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
+        data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), data))
         db.session.add_all(data)
         db.session.commit()
 
@@ -138,6 +154,18 @@ def parse_gyro():
 """
 GET REQUESTS
 """
+
+@app.route('/register')
+def get_register():
+    try:
+        # from query string
+        userId = request.args.get('userId')
+        token = request.args.get('token')
+        ns.register_token(userId, token)
+        return jsonify({'userId':userId, 'token': token})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/accel')
 def get_accel():
@@ -193,15 +221,16 @@ def get_gyro_all():
 def get_stim_all():
     try:
         userId = request.args.get('userId')
+        token = softheon.get_auth_token()
         response = softheon.get_stim_events()
         data = response.text
-        print(data)
-        records = [i.serialize for i in data]
-        return jsonify(data = records)
+        # records = [i.serialize for i in data]
+        return jsonify(data = data)
     except Exception as e:
         print(e)
         return jsonify(e)
 
 if __name__ == '__main__':
     app.run(port=APP_PORT)
+    print('softheon info', softheon_client, softheon_secret)
     print('App running on port %s' % APP_PORT)

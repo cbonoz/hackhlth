@@ -107,8 +107,8 @@ def parse_data():
             except Exception as e:
                 # Auth token likely expired, but try again.
                 softheon.get_auth_token()
-                softheon.send_stim_event(userId, detection_time)
-            ns.send_notification(userId, "Detected Stim Event")
+                response = softheon.send_stim_event(userId, detection_time)
+            ns.send_notification(userId, "Detected Stim Event: %d" + detection_time)
 
         return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:

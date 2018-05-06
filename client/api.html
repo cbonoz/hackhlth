@@ -220,17 +220,20 @@ post_data = {
   <span class="token title">Example Response:</span>
   <span class="token comment">// Successful DB response.</span>
   <span class="token code-body">
-  {
-      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
-          class="token string">INSERT</span><span class="token quotes">'</span>,
-      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
-      <span class="token json-key">oid</span>: <span class="token number">0</span>,
-      <span class="token json-key">rows</span>: [],
-      <span class="token json-key">fields</span>: [],
-      <span class="token json-key">_parsers</span>: [],
-      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
-      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+  <pre>
+ {
+      'data': [
+          {
+            "userId": XXX,
+            "x": 1,
+            "y": 2,
+            "z": 3,
+            "timestamp": XXX
+          },
+        ...
+      ]
   }
+  </pre>
   </span>
 
  <span class="token title">Definition:</span>
@@ -256,19 +259,22 @@ post_data = {
   <span class="token title">Example Response:</span>
   <span class="token comment">// Successful DB response.</span>
   <span class="token code-body">
-  {
-      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
-          class="token string">INSERT</span><span class="token quotes">'</span>,
-      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
-      <span class="token json-key">oid</span>: <span class="token number">0</span>,
-      <span class="token json-key">rows</span>: [],
-      <span class="token json-key">fields</span>: [],
-      <span class="token json-key">_parsers</span>: [],
-      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
-      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+  <pre>
+ {
+      'data': [
+          {
+            "userId": XXX,
+            "x": 1,
+            "y": 2,
+            "z": 3,
+            "timestamp": XXX
+          },
+        ...
+      ]
   }
+  </pre>
+      Note that the gyro data response takes the exact same form as the accelerometer - aside from differences in units.
   </span>
-
                         <!-- end create new jobs -->
 
                         <div class="tab-pane fade" id="nav-schedule" role="tabpanel" aria-labelledby="nav-contact-tab">

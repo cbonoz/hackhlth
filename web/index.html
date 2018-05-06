@@ -203,23 +203,26 @@
 
       // GEOMETRY & MATERIALS
       // outlined sphere
-      var geometry_sphere = new THREE.SphereGeometry(80, 15, 15);
+      var geometry_sphere = new THREE.IcosahedronGeometry( 90, 1 );
       var material_phong_outlined = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        wireframeLinewidth:3,
+        color: 0xffffff,
         shininess:30,
+        opacity: 0.4,
         specular: 0x111111,
         wireframe: true
       });
+      
       var sphere_outlined = new THREE.Mesh(geometry_sphere, material_phong_outlined);
       scene_header.add(sphere_outlined);
       sphere_outlined.castShadow = true;
       sphere_outlined.receiveShadow = true;
+      material_phong_outlined.transparent=true;
+      
       // outlined sphere ends
 
       // materials
       var lambertMaterial = new THREE.MeshLambertMaterial({
-        opacity: 0.5,
+        opacity: 0.1,
         color: 0x50acfd
       });
       lambertMaterial.transparent=true;
@@ -233,7 +236,8 @@
       } );
 
       //torus
-      var geometry_torus = new THREE.TorusKnotGeometry( 35, 4, 100, 10 );
+      var geometry_torus = new THREE.DodecahedronGeometry( 55 );
+      // var geometry_torus = new THREE.TorusKnotGeometry( 40, 3.5, 100, 10 );
 
       var torus_mesh = new THREE.Mesh( geometry_torus, lambertMaterial );
       var torus_mesh_outline = new THREE.Mesh( geometry_torus, material_phong_outlined );
@@ -321,7 +325,7 @@
       scene_header.add(ground);
 
       // brighter lights
-      var ambientLight = new THREE.AmbientLight( 0x50acfd );
+      var ambientLight = new THREE.AmbientLight( 0xe147c7 );
       scene_header.add( ambientLight );
 
       var lights_header = [];

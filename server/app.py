@@ -1,5 +1,11 @@
 from flask import Flask, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
+from softheon import Softheon
+from predict import Predict
+from notification import NotificationService
+from models import *
 
 import os
 import json
@@ -21,13 +27,9 @@ app = Flask(__name__)
 # app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_STRING
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
+
 db = SQLAlchemy(app)
-
-from models import *
-
-from softheon import Softheon
-from predict import Predict
-from notification import NotificationService
 
 db.create_all()
 
@@ -149,7 +151,7 @@ GET REQUESTS
 """
 
 @app.route('/register')
-def get_accel():
+def get_register():
     try:
         # from query string
         userId = request.args.get('userId')

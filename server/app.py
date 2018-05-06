@@ -257,7 +257,6 @@ def get_stim_all():
         response = softheon.get_stim_events()
         data = response.text
         # records = [i.serialize for i in data]
-        print("fetched %d stimming records" % len(data))
         return jsonify(data = data)
     except Exception as e:
         print(e)

@@ -42,8 +42,10 @@
           <button class="tablinks" onclick="openCity(event, 'DailyReport')">Daily Report</button>
         </div>
 
+
         <div id="Histogram" class="tabcontent">
-          <div>
+          <div style="float:left; background-color:" class="col-md-6">
+              <p style="text-align:center;">Frequency</p>
               <canvas id="myChart"></canvas>
               <div class="slidecontainer">
                   <input type="range" min="1" max="5" value="3" class="slider" id="chartRange">
@@ -51,7 +53,8 @@
               </div>
               <p>Hours: <span id="demo"></span></p>
           </div>
-          <div>
+          <div style="float:left;" class="col-md-6">
+              <p style="text-align:center;">Stimulants</p>
               <canvas id="myPieChart"></canvas>
           </div>
         </div>

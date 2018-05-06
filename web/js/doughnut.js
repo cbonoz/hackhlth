@@ -9,9 +9,9 @@ var myPieChart = new Chart(piectx, {
             backgroundColor: ['#fe8b36', '#e28679', '#d8cc5e'],
         }],
         labels: [
-            "Red",
-            "Yellow",
-            "Blue"
+            "Around People",
+            "Too Much Stimuli",
+            "Lots of Light"
         ],
 
     },

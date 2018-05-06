@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
+from sklearn.externals import joblib
 import os
 import json
 
@@ -24,13 +25,17 @@ db = SQLAlchemy(app)
 from models import *
 
 from softheon import Softheon
+from predict import Predict
 
 db.create_all()
 
 scopes = "enterpriseapi" #openid
 print('softheon info', softheon_client, softheon_secret)
 
+predict = Predict()
 softheon = Softheon(softheon_client, softheon_secret, scopes)
+
+clf = joblib.load('./ml/stim_clf.pkl')
 
 @app.route('/')
 def hello():
@@ -39,6 +44,31 @@ def hello():
 """
 POST REQUESTS
 """
+
+@app.route('/predict', methods=['POST'])
+def parse_data():
+    try:
+        body = json.loads(request.data)
+
+        accel = body['accel']
+        gyro = body['gyro']
+
+        # See if the data should be inserted as well.
+        if body['insert'] == True:
+            accel = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), accel))
+            db.session.add_all(accel)
+
+            gyro = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), gyro))
+            db.session.add_all(gyro)
+
+        test_data = predict.process_data(accel, gyro)
+        prediction = predict.predict(test_data)
+
+        db.session.commit()
+        return jsonify({'inserted': len(accel) + len(gyro), 'prediction': prediction})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/accel', methods=['POST'])
 def parse_accel():

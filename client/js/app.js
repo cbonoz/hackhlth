@@ -11,8 +11,11 @@ $(document).ready(function() {
         var data = jsonfile.data;
         jsonFile = JSON.parse(data.data);
         jsonFile.forEach(function(e) {
-            console.log(moment.unix(moment() - moment(e.CreationTime)))
-            if (moment.unix(moment() - moment(e.CreationTime)) < (5 * 60 * 60)) {
+            console.log(moment());
+            console.log(e.CreationTime);
+            console.log(moment().diff(e.CreationTime));
+            console.log((5 * 60 * 60 * 1000));
+            if (moment().diff(e.CreationTime) < (5 * 60 * 60 * 1000)) {
                 labels.push(e.CreationTime);
                 chartData.push(1);
             }
@@ -20,6 +23,7 @@ $(document).ready(function() {
         console.log(labels)
     });
     chart.update();
+
     openCity(event, 'Histogram');
 })
 

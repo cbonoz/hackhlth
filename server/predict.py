@@ -123,7 +123,7 @@ class Predict:
         prediction = self.clf.predict(test_data)
         print(test_data.shape, prediction)
         pred = int(prediction[0])
-        print('Current Stimming State', prediction[0])
+        print('Current Stimming State:', prediction[0])
         if pred:
             print("Model Detected Stimming for user %s\nEntry created in softheon DB." % userId)
         self.last_prediction[userId] = pred

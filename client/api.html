@@ -68,12 +68,12 @@
                     </a>
                     <a class="list-group-item list-group-item-blue" id="nav-contact-tab" data-toggle="tab" href="#nav-jobs"
                        role="tab" aria-controls="nav-contact" aria-selected="false">
-                        <i class="material-icons v-align">work</i>&nbsp;Accelerometer/Gyro Data
+                        <i class="material-icons v-align">work</i>&nbsp;Get Fitbit Data
                     </a>
-                    <a class="list-group-item list-group-item-blue" id="nav-contact-tab" data-toggle="tab" href="#nav-schedule"
-                       role="tab" aria-controls="nav-contact" aria-selected="false">
-                        <i class="material-icons v-align">timer</i>&nbsp;Get Historic Data
-                    </a>
+                    <!--<a class="list-group-item list-group-item-blue" id="nav-contact-tab" data-toggle="tab" href="#nav-schedule"-->
+                       <!--role="tab" aria-controls="nav-contact" aria-selected="false">-->
+                        <!--<i class="material-icons v-align">timer</i>&nbsp;Get Historic Data-->
+                    <!--</a>-->
                 </div>
             </nav>
 
@@ -90,45 +90,56 @@
 
                         <div class="tab-pane fade show active" id="nav-register" role="tabpanel" aria-labelledby="nav-home-tab">
                             <div class="jumbotron-custom bg-custom">
-                                <h1 class="d-block" id="skiptocontent">Register Ports:</h1>
+                                <h1 class="d-block" id="skiptocontent">Run a Prediction:</h1>
                             </div>
                             <pre>
   <span class="token description">
   ===
-  Register Ports:
+      Run a prediction
   ===</span>
 
   <span class="token title">Definition:</span>
   <span class="token code-body">
-  POST /api/ports/add
+  POST /predict
   </span>
 
   <span class="token title">Example Request Body: </span>
+
   <span class="token code-body">
-  {
-      <span class="token purple">ports</span>: [
-      {
-          <span class="token json-key">name</span>: <span class="token quotes">'</span><span
-          class="token string">Port 1</span><span class="token quotes">'</span>,
-          <span class="token json-key">lat</span>: <span class="token number">33.89673601</span>,
-          <span class="token json-key">lng</span>: -<span class="token number">118.2262623</span>
-      }]
-  }
+                                <pre>
+post_data = {
+    'userId': XXXXXXXXXX,
+    'insert': true,
+    'accel': [
+        {
+            'userId': XXXXXXXXXX // user id code
+            'x': 1, // floating point value
+            'y': 2, // floating point value
+            'z': 3, // floating point value
+            'timestamp': XXXXXXXXX // (timestamp in ms)
+        },
+        ...
+    ],
+    'gyro': [
+        {
+            'userId': XXXXXXXXXX // user id code
+            'x': 1, // floating point value
+            'y': 2, // floating point value
+            'z': 3, // floating point value
+            'timestamp': XXXXXXXXX // (timestamp in ms)
+        },
+        ...
+    ]
+}</pre>
   </span>
   <span class="token title">
   Example Response: </span>
   <span class="token comment">// Successful DB response.</span>
   <span class="token code-body">
   {
-      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
-          class="token string">INSERT</span><span class="token quotes">'</span>,
-      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
-      <span class="token json-key">oid</span>: <span class="token number">0</span>,
-      <span class="token json-key">rows</span>: [],
-      <span class="token json-key">fields</span>: [],
-      <span class="token json-key">_parsers</span>: [],
-      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
-      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+      <span class="token json-key">inserted</span>: <span
+          class="token string">2</span>,
+      <span class="token json-key">prediction</span>: <span class="token number">stimming</span><span class="token comment"> // 'stimming' or other classified activity</span>
   }
   </span>
 </pre>
@@ -137,61 +148,73 @@
 
                         <div class="tab-pane fade" id="nav-ports" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <div class="jumbotron-custom bg-custom">
-                                <h1 class="d-block" id="skiptocontent">Get Existing Ports:</h1>
+                                <h1 class="d-block" id="skiptocontent">Get Stimming Events:</h1>
                             </div>
                             <pre>
   <span class="token description">
   ===
-  Get existing ports
+  Get stimming events
   ===</span>
 
   <span class="token title">Definition:</span>
   <span class="token code-body">
-  GET /api/ports
+  GET /stim/all
   </span>
 
   <span class="token title">Example Response:</span>
   <span class="token code-body">
+  {
+      <span class="token json-key">userId</span>: <span class="token number">XXXXXXX</span> <span class="token comment">// database-assigned userId.</span>
+  }
+  </span>
+
+  <span class="token title">Example Response:</span>
+  <span class="token comment">// Successful DB response.</span>
+  <span class="token code-body">
+      Returns a list of stimming entities.
+  <pre>
   [
       {
-          <span class="token json-key">id</span>: <span class="token number">0</span> <span class="token comment">// database-assigned id.</span>
-          <span class="token json-key">name</span>: <span class="token quotes">'</span><span
-          class="token string">Port 1</span><span class="token quotes">'</span>,
-          <span class="token json-key">lat</span>: <span class="token number">33.89673601</span>,
-          <span class="token json-key">lng</span>: -<span class="token number">118.2262623</span>
-      }
+        'Name': 'Stim Entity',
+        'ID': X,
+          ...
+      },
+      ...
   ]
+  </pre>
+
   </span>
-</pre>
                         </div>
 
                         <div class="tab-pane fade" id="nav-jobs" role="tabpanel" aria-labelledby="nav-contact-tab">
                             <div class="jumbotron-custom bg-custom">
-                                <h1 class="d-block" id="skiptocontent">Create New Jobs:</h1>
+                                <h1 class="d-block" id="skiptocontent">Get Fitbit Data:</h1>
                             </div>
                             <pre>
   <span class="token description">
   ===
-  Create new jobs:
+      Get Accelerometer and Gyroscope Data
   ===</span>
 
   <span class="token title">Definition:</span>
+
   <span class="token code-body">
-  POST /api/jobs/add
+  GET /accel
   </span>
 
   <span class="token title">Example Request Body: </span>
   <span class="token code-body">
-  {
-      <span class="token purple">jobs</span>: [
       {
-          <span class="token json-key">day</span>: <span class="token quotes">'</span><span
-          class="token string">4-14-2018</span><span class="token quotes">'</span>, <span
-          class="token comment">// day of job</span>
-          <span class="token json-key">pickupId</span>: <span class="token number">0</span>, <span class="token comment">// portId of pickup location</span>
-          <span class="token json-key">deliveryId</span>: <span class="token number">1</span>, <span class="token comment">// portId of delivery location</span>
+          <span class="token json-key">userId</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span>,<span
+          class="token comment">// userId of desired user.</span>
+          <span class="token json-key">startTime</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span>, <span
+          class="token comment">// start time of accelerometer data events in epoch milliseconds</span>
+          <span class="token json-key">endTime</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span><span
+          class="token comment">// end time of accelerometer data events in epoch milliseconds</span>
       }
-  }
   </span>
 
   <span class="token title">Example Response:</span>
@@ -209,8 +232,43 @@
       <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
   }
   </span>
-</pre>
-                        </div>
+
+ <span class="token title">Definition:</span>
+  <span class="token code-body">
+  GET /gyro
+  </span>
+
+  <span class="token title">Example Request Body: </span>
+  <span class="token code-body">
+      {
+          <span class="token json-key">userId</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span>,<span
+          class="token comment">// userId of desired user.</span>
+          <span class="token json-key">startTime</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span>, <span
+          class="token comment">// start time of accelerometer data events in epoch milliseconds</span>
+          <span class="token json-key">endTime</span>: <span class="token quotes">'</span><span
+          class="token string">XXXXXXXXX</span><span class="token quotes">'</span><span
+          class="token comment">// end time of accelerometer data events in epoch milliseconds</span>
+      }
+  </span>
+
+  <span class="token title">Example Response:</span>
+  <span class="token comment">// Successful DB response.</span>
+  <span class="token code-body">
+  {
+      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
+          class="token string">INSERT</span><span class="token quotes">'</span>,
+      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
+      <span class="token json-key">oid</span>: <span class="token number">0</span>,
+      <span class="token json-key">rows</span>: [],
+      <span class="token json-key">fields</span>: [],
+      <span class="token json-key">_parsers</span>: [],
+      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
+      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+  }
+  </span>
+
                         <!-- end create new jobs -->
 
                         <div class="tab-pane fade" id="nav-schedule" role="tabpanel" aria-labelledby="nav-contact-tab">
@@ -293,8 +351,8 @@
             <ul class="list-unstyled text-small">
                 <li><a class="text-muted" href="#">Run a Prediction</a></li>
                 <li><a class="text-muted" href="#">Get Stimming Events</a></li>
-                <li><a class="text-muted" href="#">Accelerometer/Gyro Data</a></li>
-                <li><a class="text-muted" href="#">Get Historic Data</a></li>
+                <li><a class="text-muted" href="#">Get Fitbit Data</a></li>
+                <!--<li><a class="text-muted" href="#">Get Historic Data</a></li>-->
             </ul>
         </div>
         <div class="col-6 col-md">

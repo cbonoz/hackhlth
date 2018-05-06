@@ -194,7 +194,6 @@ def get_stim_all():
     try:
         userId = request.args.get('userId')
         response = softheon.get_stim_events()
-
         data = response.text
         print(data)
         records = [i.serialize for i in data]

@@ -120,7 +120,7 @@ body{
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
 /* Rules for using icons as white on a dark background. */
-.material-icons.md-custom { color: #50acfd; }
+.material-icons.md-custom { color: #536ba9; }
 
 .v-align{
   display: inline-flex;
@@ -155,7 +155,7 @@ body{
   color: white; }
 
 .text-cyan{
-  color: #50acfd;
+  color: #536ba9;
 }
 
 
@@ -273,24 +273,24 @@ a.list-group-item.list-group-item-blue {
 
 a.list-group-item.active {
   background-color: white;
-  color: #50acfd;
+  color: #536ba9;
   border: none;
   font-weight: 600;
-  border-left: 4px solid #50acfd; }
+  border-left: 4px solid #536ba9; }
 
 .sidebar-offcanvas .list-group-item:hover {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
-  color: #50acfd; }
+  color: #536ba9; }
 
 .sidebar-offcanvas .list-group-item:active {
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   -o-transition: all 0.3s;
   transition: all 0.3s;
-  background: #50acfd;
+  background: #536ba9;
   color: white;
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);

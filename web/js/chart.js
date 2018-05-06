@@ -11,12 +11,12 @@ $.ajax({
     url: "../data/chartjs.json",
     async: false,
     success: function(jsonfile) {
-        jsonfile.data.forEach(function(e) {
-            if (e.value !== 0) {
-                labels.push(e.timestamp);
-                chartData.push(e.value);
-            }
-        });
+        // jsonfile.data.forEach(function(e) {
+        //     if (e.value !== 0) {
+        //         labels.push(e.timestamp);
+        //         chartData.push(e.value);
+        //     }
+        // });
     }
 });
 var timeFormat = 'MM/DD/YYYY HH:mm';
@@ -61,7 +61,7 @@ const options = {
                 display: true,
                 scaleLabel: {
                     display: true,
-                    labelString: "Convulsions",
+                    labelString: "Stim",
                 }
             }]
         },

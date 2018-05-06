@@ -59,7 +59,7 @@ def parse_data():
         except KeyError as e:
             insert = False
 
-        userId = False
+        userId = '1'
         try:
             userId = body['userId']
         except KeyError as e:
@@ -109,7 +109,6 @@ def parse_gyro():
         body = json.loads(request.data)
         data = body['data']
         data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), data))
-        print(data)
         db.session.add_all(data)
         db.session.commit()
 

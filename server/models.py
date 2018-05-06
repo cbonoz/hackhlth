@@ -32,4 +32,4 @@ class Gyro(db.Model):
         return {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
 
     def __repr__(self):
-        return json.dumps(self.__dict__)
+        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}

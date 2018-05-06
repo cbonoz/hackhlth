@@ -6,7 +6,7 @@ from apns2.payload import Payload
 class NotificationService:
 
     def __init__(self):
-        self.topic = 'com.example.App'
+        self.topic = 'com.epage.QuietMind'
         self.token_map = {}
         self.client = APNsClient('key.pem', use_sandbox=False, use_alternative_port=False)
 

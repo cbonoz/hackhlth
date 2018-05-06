@@ -1,9 +1,10 @@
-# StimAlert
+# Quiet Mind
 ---
-Autism Stimming precursor tracking and analysis.
+Autism self-stimming behavior tracking, alerting, and analysis.
 Visualization
 
 ### Overall challenge:
+
 
 Make it personal. Using sponsor technology and your unique skills, build something you're passionate about that will forster better health for your family, friends, community, or the world.
 

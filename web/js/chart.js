@@ -8,7 +8,7 @@ const ctx = document.getElementById('myChart').getContext('2d');
 var count = 0;
 
 $.ajax({
-    url: "./chartjs.json",
+    url: "../data/chartjs.json",
     async: false,
     success: function(jsonfile) {
         jsonfile.data.forEach(function(e) {

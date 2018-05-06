@@ -48,7 +48,7 @@
     .attr('transform','translate('+margin.left+','+margin.top+')');
   var rect = null;
 
-  d3.json('pm25.json',function(err,data){
+  d3.json('../data/pm25.json',function(err,data){
     data = data.data;
     data.forEach(function(valueObj){
       valueObj['date'] = timeFormat.parse(valueObj['timestamp']);

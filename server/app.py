@@ -13,7 +13,7 @@ from colorama import init
 init()
 
 config = {
-    'APNS_CERTIFICATE': PROD_CERT_FILE
+    'APNS_CERTIFICATE': DEV_CERT_FILE
 }
 
 import os

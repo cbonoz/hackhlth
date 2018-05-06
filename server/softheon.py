@@ -52,7 +52,7 @@ class Softheon:
             'Authorization': 'Bearer %s' % self.access_token
         }
 
-        data = '{\n          "Category": "Common",\n          "Name": "Stim",\n          "Type" : %s,\n          "Profiles": [\n            {\n              "Type": 1,\n              "Name": "Info",\n              "Fields": [\n                {\n                  "Name": "userid",\n                  "Type": "String",\n                  "Index": 0,\n                  "Position": 0,\n                  "Default": "Super Hero",\n                  "Length": 36\n                },\n                {\n                  "Name": "timestamp",\n                  "Type": "Integer",\n                  "Index": 0,\n                  "Position": 0\n                }\n              ]\n            }\n          ],\n          "Drawers": [100]\n        }' % type
+        data = '{"Category":"Common","Name":"Stim Template","Type":"%s","Profiles":[{"Type":1,"Name":"Stim","Fields":[{"Name":"User Id","Type":"String","Index":0,"Position":0,"Default":"1","Length":25},{"Name":"Timestamp","Type":"Integer","Index":0,"Position":0}]}],"Drawers":[100]}' % type
 
 
         response = requests.post('https://hack.softheon.io/api/enterprise/v1/template/ftl/', headers=headers, data=data)
@@ -61,15 +61,22 @@ class Softheon:
 
     # 6313883095
 
-    def get_stim_events(self, data):
+    def get_stim_events(self, drawer=100):
         """
         Get stim events for a provided user id.
         :param data: {userId: ...}
         :return: api response containing list of stimming events associated with the given user id {userId: ..., data: [...]}
         """
-        # TODO: implement
 
-        response = []
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer %s' % self.access_token
+        }
+
+
+        url = "https://hack.softheon.io/api/enterprise/v1/content/entities?drawerID=%s" % drawer
+        response = requests.get(url, headers=headers)
+        response.json()
         return response
 
     def send_stim_event(self, userId, timestamp, type=STIM_ENTITY_TYPE, drawer=100):

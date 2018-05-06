@@ -3,7 +3,7 @@ var output = document.getElementById("demo");
 output.innerHTML = slider.value;
 
 $(document).ready(function() {
-    axios.get("https://2d1028fa.ngrok.io/stim/all", {
+    axios.get("https://cff47c90.ngrok.io/stim/all", {
         headers: {
             'Access-Control-Allow-Origin': '*',
         },
@@ -11,18 +11,14 @@ $(document).ready(function() {
         var data = jsonfile.data;
         jsonFile = JSON.parse(data.data);
         jsonFile.forEach(function(e) {
-            console.log(moment());
-            console.log(e.CreationTime);
-            console.log(moment().diff(e.CreationTime));
-            console.log((5 * 60 * 60 * 1000));
-            if (moment().diff(e.CreationTime) < (5 * 60 * 60 * 1000)) {
-                labels.push(e.CreationTime);
-                chartData.push(1);
+            var timeToPst = moment(e.CreationTime).subtract(3, 'h');
+            if (moment().diff(timeToPst) < (5 * 60 * 60 * 1000)) {
+                labels.push(timeToPst.format());
+                chartData.push(Math.floor(Math.random() * 3) + 1);
             }
         })
-        console.log(labels)
+        chart.update();
     });
-    chart.update();
 
     openCity(event, 'Histogram');
 })

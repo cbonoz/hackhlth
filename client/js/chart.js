@@ -42,6 +42,7 @@ const options = {
         responsive: true,
         scales: {
             xAxes: [{
+                barThickness: 3,
                 type: 'time',
                 display: true,
                 time: {

@@ -16,34 +16,42 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand mx-4" href="index.html">
-            <img style="max-width:35px;" class="navbar-left" src="img/logo.png">
-            <strong>Quiet Mind</strong>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <a class="navbar-brand mx-4" href="index.html">
+        <img style="max-width:35px;" class="navbar-left" src="img/quiet_mind_invert.png">
+        <strong>QuietMind</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link mx-4 active" href="dashboard.html"><strong>Dashboard</strong></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-4" href="api.html">API</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-4" href="#">Sign Up</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'Histogram')">Histogram</button>
-        <button class="tablinks" onclick="openCity(event, 'DailyReport')">Daily Report</button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link mx-4 active" href="dashboard.html"><strong>Dashboard</strong></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-4" href="api.html">API</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mx-4" href="#">Sign Up</a>
+            </li>
+        </ul>
     </div>
+</nav>
+<div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'Histogram')">Histogram</button>
+    <button class="tablinks" onclick="openCity(event, 'DailyReport')">Daily Report</button>
 
+    <div class="dashboard-header">
+        <div id="error-text"></div>
+        <h1>Data Dashboard:</h1>
+        <span id="dashboard-header-subtitle"></span>
+        <!--Date: <span id="date-section"></span>-->
+
+        <div id="result-section"></div>
+    </div>
 
     <div id="Histogram" class="tabcontent">
         <div style="float:left; background-color:" class="col-md-6">
@@ -60,7 +68,6 @@
             <canvas id="myPieChart"></canvas>
         </div>
     </div>
-
     <div id="DailyReport" class="tabcontent">
         <div class="days-hours-heatmap">
             <!-- calibration and render type controller -->
@@ -94,21 +101,21 @@
     </div>
 
     <footer style="float:left; text-align: center;" class="container py-4 mt-4">
-        <div class="row">
+          <div class="row">
             <div class="col-12 col-md">
-                <span class="navbar-brand">
-                    <img style="max-width:35px; color: black;" class="navbar-left" src="img/logo.png">
-                    <strong>Routable</strong>
-                  </span>
-                <span class="d-block mb-3 text-muted">&copy; 2018</span>
+              <span class="navbar-brand">
+                <img style="max-width:35px; color: black;" class="navbar-left" src="img/brain.png">
+                <strong>QuietMind</strong>
+              </span>
+              <span class="d-block mb-3 text-muted">&copy; 2018</span>
             </div>
             <div class="col-6 col-md">
-                <h5>Features</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">Map routing</a></li>
-                    <li><a class="text-muted" href="#">API docs</a></li>
-                    <li><a class="text-muted" href="#">Mobile app</a></li>
-                </ul>
+              <h5>Features</h5>
+              <ul class="list-unstyled text-small">
+                <li><a class="text-muted" href="#">Fitbit and Mobile App</a></li>
+                <li><a class="text-muted" href="#">Web Application</a></li>
+                <li><a class="text-muted" href="#">API Access</a></li>
+              </ul>
             </div>
             <div class="col-6 col-md">
                 <h5>Map</h5>

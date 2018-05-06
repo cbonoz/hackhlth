@@ -25,7 +25,7 @@
 
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <a class="navbar-brand mx-4" href="index.html">
-        <img style="max-width:35px;" class="navbar-left" src="img/logo.png">
+        <img style="max-width:35px;" class="navbar-left" src="img/quiet_mind_invert.png">
         <strong>QuietMind</strong>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -220,17 +220,20 @@ post_data = {
   <span class="token title">Example Response:</span>
   <span class="token comment">// Successful DB response.</span>
   <span class="token code-body">
-  {
-      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
-          class="token string">INSERT</span><span class="token quotes">'</span>,
-      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
-      <span class="token json-key">oid</span>: <span class="token number">0</span>,
-      <span class="token json-key">rows</span>: [],
-      <span class="token json-key">fields</span>: [],
-      <span class="token json-key">_parsers</span>: [],
-      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
-      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+  <pre>
+ {
+      'data': [
+          {
+            "userId": XXX,
+            "x": 1,
+            "y": 2,
+            "z": 3,
+            "timestamp": XXX
+          },
+        ...
+      ]
   }
+  </pre>
   </span>
 
  <span class="token title">Definition:</span>
@@ -256,19 +259,22 @@ post_data = {
   <span class="token title">Example Response:</span>
   <span class="token comment">// Successful DB response.</span>
   <span class="token code-body">
-  {
-      <span class="token json-key">command</span>: <span class="token quotes">'</span><span
-          class="token string">INSERT</span><span class="token quotes">'</span>,
-      <span class="token json-key">rowCount</span>: <span class="token number">1</span>,
-      <span class="token json-key">oid</span>: <span class="token number">0</span>,
-      <span class="token json-key">rows</span>: [],
-      <span class="token json-key">fields</span>: [],
-      <span class="token json-key">_parsers</span>: [],
-      <span class="token json-key">RowCtor</span>: <span class="token state">null</span>,
-      <span class="token json-key">rowAsArray</span>: <span class="token state">false</span>
+  <pre>
+ {
+      'data': [
+          {
+            "userId": XXX,
+            "x": 1,
+            "y": 2,
+            "z": 3,
+            "timestamp": XXX
+          },
+        ...
+      ]
   }
+  </pre>
+      Note that the gyro data response takes the exact same form as the accelerometer - aside from differences in units.
   </span>
-
                         <!-- end create new jobs -->
 
                         <div class="tab-pane fade" id="nav-schedule" role="tabpanel" aria-labelledby="nav-contact-tab">
@@ -325,7 +331,7 @@ post_data = {
     <div class="row">
         <div class="col-12 col-md">
           <span class="navbar-brand">
-            <img style="max-width:35px; color: black;" class="navbar-left" src="img/logo.png">
+            <img style="max-width:35px; color: black;" class="navbar-left" src="img/brain.png">
             <strong>QuietMind</strong>
           </span>
             <span class="d-block mb-3 text-muted">&copy; 2018</span>

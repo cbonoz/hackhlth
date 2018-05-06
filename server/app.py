@@ -7,6 +7,11 @@ from predict import Predict
 from notification import NotificationService
 from models import *
 
+from colorama import Fore, Back, Style
+from colorama import init
+init()
+
+
 import os
 import json
 import time
@@ -101,7 +106,7 @@ def parse_data():
         test_data = predict.process_data(accel, gyro)
         prediction = predict.predict_stim(userId, test_data)
 
-        if prediction and not predict.is_new_stim(userId): # if we just had an upward spike
+        if prediction and predict.is_new_stim(userId): # if we just had an upward spike
             # We had a stimming event detection, record to softheon using the current time of detection.
             detection_time = int(time.time())
             try:
@@ -218,7 +223,6 @@ def get_stim_all():
         userId = request.args.get('userId')
         token = softheon.get_auth_token()
         response = softheon.get_stim_events()
-        print(softheon.access_token, response.text)
         data = response.text
         # records = [i.serialize for i in data]
         return jsonify(data = data)

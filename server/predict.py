@@ -2,6 +2,7 @@
 import pandas as pd
 from sklearn.externals import joblib
 from simplestatistics import *
+from colorama import Fore, Back, Style
 
 # Mean	mean([1, 2, 3])
 # Median	median([10, 2, -5, -1])
@@ -109,7 +110,8 @@ class Predict:
 
     def is_new_stim(self, userId):
         if userId in self.last_prediction:
-            return self.last_prediction[userId]
+            # return True if the last_prediction was negative.
+            return not self.last_prediction[userId]
         # not present is a new stim
         return True
 
@@ -123,9 +125,17 @@ class Predict:
         prediction = self.clf.predict(test_data)
         print(test_data.shape, prediction)
         pred = int(prediction[0])
-        print('Current Stimming State:', prediction[0])
         if pred:
-            print("Model Detected Stimming for user %s\nEntry created in softheon DB." % userId)
+            color = Fore.RED
+            text = "Stimming Detected"
+        else:
+            color = Fore.GREEN
+            text = "Ok"
+        print('Current Stimming Status: ' + color + '%s' % text)
+        if pred:
+            print(Fore.RED + "Stimming detected for user (%s)\nEntry created in softheon DB." % userId)
+
+        print(Style.RESET_ALL)
         self.last_prediction[userId] = pred
         return pred
 

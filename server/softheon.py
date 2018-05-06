@@ -52,7 +52,7 @@ class Softheon:
             'Authorization': 'Bearer %s' % self.access_token
         }
 
-        data = '{\n          "Category": "Common",\n          "Name": "Stim",\n          "Type" : %s,\n          "Profiles": [\n            {\n              "Type": 1,\n              "Name": "Info",\n              "Fields": [\n                {\n                  "Name": "userid",\n                  "Type": "String",\n                  "Index": 0,\n                  "Position": 0,\n                  "Default": "Super Hero",\n                  "Length": 36\n                },\n                {\n                  "Name": "timestamp",\n                  "Type": "Integer",\n                  "Index": 0,\n                  "Position": 0\n                }\n              ]\n            }\n          ],\n          "Drawers": [1]\n        }' % type
+        data = '{\n          "Category": "Common",\n          "Name": "Stim",\n          "Type" : %s,\n          "Profiles": [\n            {\n              "Type": 1,\n              "Name": "Info",\n              "Fields": [\n                {\n                  "Name": "userid",\n                  "Type": "String",\n                  "Index": 0,\n                  "Position": 0,\n                  "Default": "Super Hero",\n                  "Length": 36\n                },\n                {\n                  "Name": "timestamp",\n                  "Type": "Integer",\n                  "Index": 0,\n                  "Position": 0\n                }\n              ]\n            }\n          ],\n          "Drawers": [100]\n        }' % type
 
 
         response = requests.post('https://hack.softheon.io/api/enterprise/v1/template/ftl/', headers=headers, data=data)
@@ -72,7 +72,7 @@ class Softheon:
         response = []
         return response
 
-    def send_stim_event(self, userId, timestamp):
+    def send_stim_event(self, userId, timestamp, type=STIM_ENTITY_TYPE, drawer=100):
         """
         Send autistic stimming event to the softheon server for secure storage and recording.
         :param userId: userId of the user to record
@@ -99,12 +99,14 @@ class Softheon:
                 }
             ],
             "Acl": -1,
-            "Type": STIM_ENTITY_TYPE,
+            "Type": type,
             "Subtype": 0,
             "State": "Available",
             "Name": "Stim Entity"
         }
 
-        response = requests.post('https://hack.softheon.io/api/enterprise/v1/content/entities/2', headers=headers,
+        print(data)
+
+        response = requests.post('https://hack.softheon.io/api/enterprise/v1/content/entities/%d' % drawer, headers=headers,
                                  data=json.dumps(data))
         return response

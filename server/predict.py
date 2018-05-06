@@ -17,15 +17,15 @@ class Predict:
         :return: dataframe with one row ready for prediction via the 'predict' method below.
         """
 
-        return pd.Dataframe()
+        return pd.DataFrame()
 
-    def predict(self, data):
+    def predict_stim(self, data):
         """
         :param data: dataframe containing data for prediction
         :return: list of predicted activity values for each row of data.
         """
 
-        return pd.Dataframe()
+        return True
 
 
 

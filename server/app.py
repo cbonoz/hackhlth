@@ -65,6 +65,24 @@ def parse_data():
         except KeyError as e:
             userId = '1'
 
+        try:
+            type = body['type']
+            # there is a type declared
+            fd = open('./ml/data/accel_data_%s.txt' % type,'a')
+            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), accel)))
+            fd.write(text)
+            fd.close()
+
+            fd = open('./ml/data/gyro_data_%s.txt' % type,'a')
+            text = '\n'.join(list(map(lambda val: "%s %s %s %s" % (val['x'], val['y'], val['z'], val['timestamp']), gyro)))
+            fd.write(text)
+            fd.close()
+
+        except KeyError as e:
+            print('no type declared - not training')
+
+        print('insert', insert, 'userId', userId, 'accel', len(accel), 'gyro', len(gyro))
+
         # See if the data should be inserted as well.
         if insert == True:
             accel = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), accel))
@@ -74,7 +92,7 @@ def parse_data():
             db.session.add_all(gyro)
 
         test_data = predict.process_data(accel, gyro)
-        prediction = predict.predict(test_data)
+        prediction = predict.predict_stim(test_data)
 
         if prediction:
             # We had a stimming event detection, record to softheon using the current time of detection.

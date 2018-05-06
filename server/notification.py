@@ -4,8 +4,12 @@ from apns2.client import APNsClient
 from apns2.payload import Payload
 # from pushjack import APNSClient
 
-CERT_FILE = "./apns-dev.pem"
+DEV_CERT_FILE = "./apns-dev.pem"
 KEY_FILE = "./apns-dev-key-noenc.pem"
+PROD_CERT_FILE = "./apns-prod.pem"
+
+DEFAULT_TOKEN = 'f7ca3b57016e6882fe11b7253e16b2068bdee0f119800b4271456bb04e896149'
+# DEFAULT_TOKEN =
 
 # https://github.com/Pr0Ger/PyAPNs2
 class NotificationService:
@@ -13,7 +17,7 @@ class NotificationService:
     def __init__(self):
         self.topic = 'com.epage.QuietMind'
         self.token_map = {}
-        self.client = APNsClient(CERT_FILE, use_sandbox=True, use_alternative_port=False)
+        self.client = APNsClient(DEV_CERT_FILE, use_sandbox=True, use_alternative_port=False)
         # self.apns = APNs(use_sandbox=True, cert_file=CERT_FILE, key_file=KEY_FILE)
         # self.apns = APNs(use_sandbox=True, cert_file=CERT_FILE, enhanced=True)
         # self.client = APNSClient(certificate=CERT_FILE,
@@ -29,7 +33,7 @@ class NotificationService:
     def get_token(self, userId):
         if userId in self.token_map:
             return self.token_map[userId]
-        return 'f7ca3b57016e6882fe11b7253e16b2068bdee0f119800b4271456bb04e896149'
+        return DEFAULT_TOKEN
 
     def send_notification(self, userId, message="Hello World!"):
 

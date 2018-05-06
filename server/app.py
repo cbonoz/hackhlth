@@ -132,7 +132,7 @@ def parse_data():
                 # Send to single device.
                 res = apns_client.send(ns.get_token(userId), "Stimming detected for %s" % userId)
                 print('apns', res.__dict__)
-            # ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
+            ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
 
         return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:

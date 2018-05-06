@@ -37,11 +37,19 @@ class NotificationService:
 
     def send_notification(self, userId, message="Hello World!"):
 
-        # Send an iOS 10 compatible notification
-        payload = Payload(alert=message, sound="default", badge=1)
         token_hex = self.get_token(userId)
+        payload = Payload(alert=message, sound="default", badge=1)
+        print(payload.__dict__)
+        topic = 'com.epage.QuietMind'
+
+        self.client = APNsClient(DEV_CERT_FILE, use_sandbox=True, use_alternative_port=False)
+        self.client.send_notification(token_hex, payload, topic)
+
+        # Send an iOS 10 compatible notification
+        # payload = Payload(alert=message, sound="default", badge=1)
+        # token_hex = self.get_token(userId)
         # self.client.send(token_hex, message)
         # self.apns.gateway_server.send_notification(token_hex, payload)
 
-        print('send notification payload', payload, 'token', token_hex)
-        self.client.send_notification(token_hex, payload, self.topic)
+        # print('send notification payload', payload, 'token', token_hex)
+        # self.client.send_notification(token_hex, payload, self.topic)

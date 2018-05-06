@@ -26,13 +26,15 @@ from models import *
 
 from softheon import Softheon
 from predict import Predict
+from notification import NotificationService
 
 db.create_all()
 
-scopes = "enterpriseapi" #openid
+scopes = "enterpriseapi,openid"
 print('softheon info', softheon_client, softheon_secret)
 
 predict = Predict()
+ns = NotificationService()
 softheon = Softheon(softheon_client, softheon_secret, scopes)
 
 
@@ -57,6 +59,12 @@ def parse_data():
         except KeyError as e:
             insert = False
 
+        userId = False
+        try:
+            userId = body['userId']
+        except KeyError as e:
+            userId = '1'
+
         # See if the data should be inserted as well.
         if insert == True:
             accel = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), accel))
@@ -67,6 +75,12 @@ def parse_data():
 
         test_data = predict.process_data(accel, gyro)
         prediction = predict.predict(test_data)
+
+        if prediction:
+            # We had a stimming event detection, record to softheon using the current time of detection.
+            detection_time = int(time.time())
+            softheon.send_stim_event(userId, detection_time)
+            ns.send_notification("Detected Stim Event")
 
         db.session.commit()
         return jsonify({'inserted': len(accel) + len(gyro), 'prediction': prediction})

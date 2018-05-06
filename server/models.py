@@ -11,9 +11,6 @@ class Accel(db.Model):
     z = db.Column(db.Float())
     timestamp = db.Column(db.Float())
 
-    # def __repr__(self):
-    #     return json.dumps(self.__dict__)
-
     @property
     def serialize(self):
         return {'x': self.x, 'y': self.y, 'z': self.z, 'timestamp': int(self.timestamp)}
@@ -36,6 +33,3 @@ class Gyro(db.Model):
 
     def __repr__(self):
         return json.dumps(self.__dict__)
-
-    # def __repr__(self):
-    #     return '{"x": %f, "y": %f, "z": %f, "timestamp": %d}' % (self.x, self.y, self.z, int(self.timestamp))

@@ -70,10 +70,10 @@
                        role="tab" aria-controls="nav-contact" aria-selected="false">
                         <i class="material-icons v-align">work</i>&nbsp;Get Fitbit Data
                     </a>
-                    <!--<a class="list-group-item list-group-item-blue" id="nav-contact-tab" data-toggle="tab" href="#nav-schedule"-->
-                       <!--role="tab" aria-controls="nav-contact" aria-selected="false">-->
-                        <!--<i class="material-icons v-align">timer</i>&nbsp;Get Historic Data-->
-                    <!--</a>-->
+                    <a class="list-group-item list-group-item-blue" id="nav-schedule-tab" data-toggle="tab" href="#nav-stim"
+                       role="tab" aria-controls="nav-schedule" aria-selected="false">
+                        <i class="material-icons v-align">timer</i>&nbsp;Get Stimming Status
+                    </a>
                 </div>
             </nav>
 
@@ -95,7 +95,7 @@
                             <pre>
   <span class="token description">
   ===
-      Run a prediction
+      Run a Stimming prediction based on provided data
   ===</span>
 
   <span class="token title">Definition:</span>
@@ -132,25 +132,26 @@ post_data = {
     ]
 }</pre>
   </span>
-  <span class="token title">
+                            <span class="token title">
   Example Response: </span>
-  <span class="token comment">// Successful DB response.</span>
-  <span class="token code-body">
+                            <span class="token comment">// Successful DB response.</span>
+                            <span class="token code-body">
   {
       <span class="token json-key">inserted</span>: <span
-          class="token string">2</span>,
+                                    class="token string">2</span>,
       <span class="token json-key">prediction</span>: <span class="token number">stimming</span><span class="token comment"> // 'stimming' or other classified activity</span>
   }
   </span>
-</pre>
+
+                            </pre>
                         </div>
                         <!-- end register ports -->
 
-                        <div class="tab-pane fade" id="nav-ports" role="tabpanel" aria-labelledby="nav-profile-tab">
-                            <div class="jumbotron-custom bg-custom">
-                                <h1 class="d-block" id="skiptocontent">Get Stimming Events:</h1>
-                            </div>
-                            <pre>
+<div class="tab-pane fade" id="nav-ports" role="tabpanel" aria-labelledby="nav-profile-tab">
+<div class="jumbotron-custom bg-custom">
+    <h1 class="d-block" id="skiptocontent">Get Stimming Events:</h1>
+</div>
+<pre>
   <span class="token description">
   ===
   Get stimming events
@@ -277,14 +278,14 @@ post_data = {
   </span>
                         <!-- end create new jobs -->
 
-                        <div class="tab-pane fade" id="nav-schedule" role="tabpanel" aria-labelledby="nav-contact-tab">
-                            <div class="jumbotron-custom bg-custom">
-                                <h1 class="d-block" id="skiptocontent">Get Optimal Schedule for the Day:</h1>
-                            </div>
-                            <pre>
+<div class="tab-pane fade" id="nav-stim" role="tabpanel" aria-labelledby="nav-schedule-tab">
+    <div class="jumbotron-custom bg-custom">
+        <h1 class="d-block" id="skiptocontent">Get User Status:</h1>
+    </div>
+    <pre>
   <span class="token description">
   ===
-  Get Optimal Schedule for day
+  Get current Stimming status for a particular userId
   ===</span>
 
   <span class="token title">Definition:</span>
@@ -295,34 +296,30 @@ post_data = {
   <span class="token title">Example Request Body:</span>
   <span class="token code-body">
   {
-      <span class="token json-key">startPortId</span>: <span class="token number">0</span>, <span class="token comment">// origin and return port for vehicles</span>
-      <span class="token json-key">numVehicles</span>: <span class="token number">2</span>, <span class="token comment">// number of vehicles starting at port</span>
-      <span class="token json-key">jobDate</span>: <span class="token quotes">'</span><span
-          class="token string">4-14-2018</span><span class="token quotes">'</span> <span class="token comment">// jobDate for optimal schedule computation</span>
+      <span class="token json-key">userId</span>: <span class="token number">XXXX</span>, <span class="token comment">// userId of the desired user</span>
   }
   </span>
 
   <span class="token title">Example Response:</span>
   <span class="token code-body">
   {
-      <span class="token json-key">cost</span>: X, <span class="token comment">// optimal cost for schedule</span>
-      <span class="token json-key">routes</span>:[[],[]], <span class="token comment">// nodes for each vehicle to visit (index i = route for truck i)</span>
-      <span class="token json-key">times</span>:[[],[]] <span class="token comment">// times that truck i can acceptablely arrive/leave at each route node,</span>
+      <span class="token json-key">status</span>: 1, <span
+          class="token comment">// 1 if detected stimming, 0 if in normal state</span>
   }
-
-</span>
+    </span>
 
 </pre>
                         </div>
-                        <!-- end get optimal schedule for day -->
+                                <!-- end get optimal schedule for day -->
 
-                    </div>
-                </div> <!-- .row -->
+                        </div>
+                    </div> <!-- .row -->
 
-            </div><!--/paper-->
-        </div><!--/span-->
-        <!-- off canvas links -->
-    </div><!--/row-->
+                </div><!--/paper-->
+            </div><!--/span-->
+            <!-- off canvas links -->
+        </div><!--/row-->
+    </div>
 </main><!--/.container-->
 <!-- off canvas nav ends -->
 
@@ -358,7 +355,7 @@ post_data = {
                 <li><a class="text-muted" href="#">Run a Prediction</a></li>
                 <li><a class="text-muted" href="#">Get Stimming Events</a></li>
                 <li><a class="text-muted" href="#">Get Fitbit Data</a></li>
-                <!--<li><a class="text-muted" href="#">Get Historic Data</a></li>-->
+                <li><a class="text-muted" href="#">Get Current Status</a></li>
             </ul>
         </div>
         <div class="col-6 col-md">

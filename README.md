@@ -33,6 +33,37 @@ App allows insight into behavior outside of direct parental or clinician attenti
 
 #### Uploading data
 
+
+The POST endpoint for `/predict` expect lists of data entries in the following body format. You can also simultaneously insert the data by setting insert=True.
+
+<pre>
+post_data = {
+    'userId': XXXXXXXXXX,
+    'insert': true,
+    'accel': [
+        {
+            'userId': XXXXXXXXXX // user id code
+            'x': 1, // floating point value
+            'y': 2, // floating point value
+            'z': 3, // floating point value
+            'timestamp': XXXXXXXXX // (timestamp in ms)
+        },
+        ...
+    ],
+    'gyro': [
+        {
+            'userId': XXXXXXXXXX // user id code
+            'x': 1, // floating point value
+            'y': 2, // floating point value
+            'z': 3, // floating point value
+            'timestamp': XXXXXXXXX // (timestamp in ms)
+        },
+        ...
+    ]
+}
+</pre>
+
+
 The POST endpoints for `/accel` and `/gyro` expect lists of data entries in the following body format.
 <pre>
 post_data = {

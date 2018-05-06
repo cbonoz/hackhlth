@@ -53,7 +53,11 @@ class Softheon:
             ('scope', self.scopes),
         ]
 
-        response = requests.post('https://hack.softheon.io/oauth2/connect/token', headers=headers, data=data)
-        return response
+        try:
+            response = requests.post('https://hack.softheon.io/oauth2/connect/token', headers=headers, data=data)
+            res = response.json()
+            return res['access_token']
+        except Exception as e:
+
 
 

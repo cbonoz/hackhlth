@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
-from sklearn.externals import joblib
+
 import os
 import json
 
@@ -35,7 +35,6 @@ print('softheon info', softheon_client, softheon_secret)
 predict = Predict()
 softheon = Softheon(softheon_client, softheon_secret, scopes)
 
-clf = joblib.load('./ml/stim_clf.pkl')
 
 @app.route('/')
 def hello():
@@ -52,9 +51,14 @@ def parse_data():
 
         accel = body['accel']
         gyro = body['gyro']
+        insert = False
+        try:
+            insert = body['insert']
+        except KeyError as e:
+            insert = False
 
         # See if the data should be inserted as well.
-        if body['insert'] == True:
+        if insert == True:
             accel = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], timestamp=val['timestamp']), accel))
             db.session.add_all(accel)
 

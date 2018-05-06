@@ -1,12 +1,13 @@
 
 import pandas as pd
+from sklearn.externals import joblib
 
 
 class Predict:
     # Prediction class and utility methods for the stimalert server application.
 
     def __init__(self):
-        return
+        self.clf = joblib.load('./ml/stim_clf.pkl')
 
     def process_data(self, accel, gyro):
         """

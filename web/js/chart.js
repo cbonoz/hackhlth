@@ -26,7 +26,7 @@ const data = {
     labels: labels,
     datasets: [{
         fill: false,
-        label: 'Convulsions',
+        label: 'Stimming',
         data: chartData,
         borderColor: '#fe8b36',
         backgroundColor: '#fe8b36',

@@ -108,7 +108,7 @@ def parse_data():
                 # Auth token likely expired, but try again.
                 softheon.get_auth_token()
                 softheon.send_stim_event(userId, detection_time)
-            ns.send_notification("Detected Stim Event")
+            ns.send_notification(userId, "Detected Stim Event")
 
         return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:
@@ -147,6 +147,18 @@ def parse_gyro():
 """
 GET REQUESTS
 """
+
+@app.route('/register')
+def get_accel():
+    try:
+        # from query string
+        userId = request.args.get('userId')
+        token = request.args.get('token')
+        ns.register_token(userId, token)
+        return jsonify({'userId':userId, 'token': token})
+    except Exception as e:
+        print(e)
+        return jsonify(e)
 
 @app.route('/accel')
 def get_accel():

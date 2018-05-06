@@ -7,12 +7,19 @@ class NotificationService:
 
     def __init__(self):
         self.topic = 'com.example.App'
-        # TODO: replace with db lookup so token hex can be mapped for each device.
-        self.token_hex = 'b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b87'
-        self.client = None
-        # self.client = APNsClient('key.pem', use_sandbox=False, use_alternative_port=False)
+        self.token_map = {}
+        self.client = APNsClient('key.pem', use_sandbox=False, use_alternative_port=False)
 
-    def send_notification(self, message="Hello World!"):
+    def register_token(self, userId, token_file):
+        self.token_map[userId] = token_file
+
+    def get_token(self, userId):
+        if userId in self.token_map:
+            return self.token_map[userId]
+        return ''
+
+    def send_notification(self, userId, message="Hello World!"):
         payload = Payload(alert=message, sound="default", badge=1)
-        # self.client.send_notification(self.token_hex, payload, self.topic)
+        token_hex = self.get_token(userId)
+        self.client.send_notification(token_hex, payload, self.topic)
         print('send notification payload', payload)

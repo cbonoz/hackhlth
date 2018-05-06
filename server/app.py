@@ -31,11 +31,9 @@ from notification import NotificationService
 
 db.create_all()
 
-scopes = "enterpriseapi,openid"
-
 predict = Predict()
 ns = NotificationService()
-softheon = Softheon(softheon_client, softheon_secret, scopes)
+softheon = Softheon(softheon_client, softheon_secret)
 
 
 @app.route('/')
@@ -204,11 +202,12 @@ def get_gyro_all():
 def get_stim_all():
     try:
         userId = request.args.get('userId')
+        token = softheon.get_auth_token()
         response = softheon.get_stim_events()
+        print(softheon.access_token, response.text)
         data = response.text
-        print(data)
-        records = [i.serialize for i in data]
-        return jsonify(data = records)
+        # records = [i.serialize for i in data]
+        return jsonify(data = data)
     except Exception as e:
         print(e)
         return jsonify(e)

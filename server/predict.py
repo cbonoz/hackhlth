@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.externals import joblib
 from simplestatistics import *
 
-from simplestatistics import *
 # Mean	mean([1, 2, 3])
 # Median	median([10, 2, -5, -1])
 # Mode	mode([2, 1, 3, 2, 1])
@@ -91,26 +90,17 @@ class Predict:
         for col in ['x', 'y', 'z']:
             accel = list(map(lambda val: val[col], accel_data))
             gyro = list(map(lambda val: val[col], gyro_data))
-            #         print(accel, len(gyro))
             df['accel-mean-%s' % col] = mean(accel)
             df['accel-median-%s' % col] = median(accel)
-            #         df['accel-mode-%s' % col] = mode(accel)
-            #         df['accel-skew-%s' % col] = skew(accel)
-            #         df['accel-kurt-%s' % col] = kurtosis(accel)
             df['accel-rms-%s' % col] = root_mean_square(accel)
             df['accel-std-%s' % col] = standard_deviation(accel)
-            #         df['accel-zscore-%s' % col] = z_scores(accel)
             df['accel-min-%s' % col] = min(accel)
             df['accel-max-%s' % col] = max(accel)
 
             df['gyro-mean-%s' % col] = mean(gyro)
             df['gyro-median-%s' % col] = median(gyro)
-            #         df['gyro-mode-%s' % col] = mode(gyro)
-            #         df['gyro-skew-%s' % col] = skew(gyro)
-            #         df['gyro-kurt-%s' % col] = kurtosis(gyro)
             df['gyro-rms-%s' % col] = root_mean_square(gyro)
             df['gyro-std-%s' % col] = standard_deviation(gyro)
-            #         df['gyro-zscore-%s' % col] = z_scores(gyro)
             df['gyro-min-%s' % col] = min(gyro)
             df['gyro-max-%s' % col] = max(gyro)
 
@@ -131,7 +121,7 @@ class Predict:
         """
         # print(test_data)
         prediction = self.clf.predict(test_data)
-        print(test_data, prediction)
+        print(test_data.shape, prediction)
         pred = int(prediction[0])
         self.last_prediction[userId] = pred
         return pred

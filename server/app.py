@@ -1,16 +1,20 @@
 from flask import Flask, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_pushjack import FlaskAPNS
 
 from softheon import Softheon
 from predict import Predict
-from notification import NotificationService
+from notification import NotificationService, CERT_FILE, KEY_FILE
 from models import *
 
 from colorama import Fore, Back, Style
 from colorama import init
 init()
 
+config = {
+    'APNS_CERTIFICATE': CERT_FILE
+}
 
 import os
 import json
@@ -29,9 +33,15 @@ DB_STRING = "postgres://%s:%s@%s:%s/stim" % (DB_USER, DB_PASS, DB_HOST, PORT)
 # print(DB_STRING)
 
 app = Flask(__name__)
+app.config.update(config)
 # app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_STRING
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+client = FlaskAPNS()
+client.init_app(app)
+
 CORS(app)
 
 db = SQLAlchemy(app)
@@ -117,7 +127,12 @@ def parse_data():
                 softheon.get_auth_token()
                 response = softheon.send_stim_event(userId, detection_time)
             print("Entry created in softheon DB")
-            ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
+
+            with app.app_context():
+                # Send to single device.
+                res = client.send(ns.get_token(userId), "Stimming detected for %s" % userId)
+                print('apns', res.__dict__)
+            # ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
 
         return jsonify({'inserted': inserted, 'prediction': prediction})
     except Exception as e:

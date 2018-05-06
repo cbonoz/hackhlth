@@ -130,7 +130,7 @@ def parse_data():
 
             with app.app_context():
                 # Send to single device.
-                res = apns_client.send(ns.get_token(userId), "Stimming detected for %s" % userId)
+                res = apns_client.send(ns.get_token(userId), "Stimming detected for ID(%s)." % userId)
                 print('apns', res.__dict__)
             ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
 

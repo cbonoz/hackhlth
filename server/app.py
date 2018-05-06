@@ -180,7 +180,9 @@ def get_status():
         val = 0
         if userId in predict.last_prediction:
             val = predict.last_prediction[userId] + 0
-        return jsonify({'status':val})
+        status_json = {'status':val}
+        print(status_json)
+        return jsonify(status_json)
     except Exception as e:
         print(e)
         return jsonify(e)

@@ -5,7 +5,7 @@ from flask_pushjack import FlaskAPNS
 
 from softheon import Softheon
 from predict import Predict
-from notification import NotificationService, CERT_FILE, KEY_FILE
+from notification import NotificationService, DEV_CERT_FILE, KEY_FILE, PROD_CERT_FILE
 from models import *
 
 from colorama import Fore, Back, Style
@@ -13,7 +13,7 @@ from colorama import init
 init()
 
 config = {
-    'APNS_CERTIFICATE': CERT_FILE
+    'APNS_CERTIFICATE': PROD_CERT_FILE
 }
 
 import os
@@ -39,8 +39,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_STRING
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-client = FlaskAPNS()
-client.init_app(app)
+apns_client = FlaskAPNS()
+apns_client.init_app(app)
 
 CORS(app)
 
@@ -130,7 +130,7 @@ def parse_data():
 
             with app.app_context():
                 # Send to single device.
-                res = client.send(ns.get_token(userId), "Stimming detected for %s" % userId)
+                res = apns_client.send(ns.get_token(userId), "Stimming detected for %s" % userId)
                 print('apns', res.__dict__)
             # ns.send_notification(userId, "Detected Stim Event: %d" % detection_time)
 

@@ -80,7 +80,7 @@ def parse_data():
             fd.close()
 
         except KeyError as e:
-            print('no type declared - not training')
+            print('no type declared - not training, in live mode.')
             type = None
 
         print('insert', insert, 'userId', userId, 'accel', len(accel), 'gyro', len(gyro), 'type', type)

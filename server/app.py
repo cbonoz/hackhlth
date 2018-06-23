@@ -26,7 +26,7 @@ DB_PASS = os.environ['STIM_DB_PASS']
 
 DB_HOST = "localhost"
 PORT = '5432'
-APP_PORT = 3000
+APP_PORT = 9001
 
 DB_STRING = "postgres://%s:%s@%s:%s/stim" % (DB_USER, DB_PASS, DB_HOST, PORT)
 print('db', DB_STRING)
@@ -50,7 +50,7 @@ predict = Predict()
 ns = NotificationService()
 
 
-@app.route('/')
+@app.route('/hello')
 def hello():
     return "Hello World!"
 

@@ -21,7 +21,6 @@ class Accel(db.Model):
 
 class Gyro(db.Model):
     __tablename__ = 'gyro'
-
     id = db.Column(db.Integer, primary_key=True)
     userId = db.Column(db.String())
     x = db.Column(db.Float())
@@ -35,3 +34,20 @@ class Gyro(db.Model):
 
     def __repr__(self):
         return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'userId':self.userId, 'timestamp': int(self.timestamp)}
+
+
+class StimEvent(db.Model):
+    __tablename__ = 'stimevent'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
+    timestamp = db.Column(db.Float())
+
+    @property
+    def serialize(self):
+        return {'userId':self.userId, 'timestamp': int(self.timestamp)}
+
+    def __repr__(self):
+        obj = {'userId':self.userId, 'timestamp': int(self.timestamp)}
+        return "%s" % obj
+
+db.create_all()

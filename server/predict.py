@@ -61,7 +61,7 @@ class Predict:
     # Prediction class and utility methods for the stimalert server application.
 
     def __init__(self):
-        self.clf = joblib.load('./ml/stim_clf.pkl')
+        self.clf = joblib.load('./ml/health_model.pkl')
         self.last_prediction = {}
 
     # Mean	mean([1, 2, 3])
@@ -111,7 +111,7 @@ class Predict:
     def is_new_stim(self, userId):
         if userId in self.last_prediction:
             # return True if the last_prediction was negative.
-            return not self.last_prediction[userId]
+            return not self.last_prediction[userId]['pred']
         # not present is a new stim
         return True
 
@@ -123,7 +123,7 @@ class Predict:
         """
         # print(test_data)
         prediction = self.clf.predict(test_data)
-        print(test_data.shape, prediction)
+        print('prediction test_data shape', test_data.shape, 'stimming:', prediction)
         pred = int(prediction[0])
         if pred:
             color = Fore.RED
@@ -136,7 +136,10 @@ class Predict:
             print(Fore.RED + "Stimming detected for user (%s)" % userId)
 
         print(Style.RESET_ALL)
-        self.last_prediction[userId] = pred
+        row = test_data.iloc[0]
+        vals = [row['accel-std-x'], row['accel-std-y'], row['accel-std-z']]
+        accel_std = round((sum(list(map(lambda x: float(x)**2, vals))))**.5, 2)
+        self.last_prediction[userId] = {'pred': pred, 'accel-std': str(accel_std)}
         return pred
 
 

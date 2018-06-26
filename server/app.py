@@ -2,14 +2,13 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_pushjack import FlaskAPNS
+from sqlalchemy.dialects.postgresql import JSON
 
 from predict import Predict
 from notification import NotificationService, DEV_CERT_FILE, KEY_FILE, PROD_CERT_FILE
-from models import *
 
 from colorama import Fore, Back, Style
 from colorama import init
-
 
 init()
 
@@ -31,8 +30,6 @@ APP_PORT = 9001
 DB_STRING = "postgres://%s:%s@%s:%s/stim" % (DB_USER, DB_PASS, DB_HOST, PORT)
 print('db', DB_STRING)
 
-from models import *
-
 app = Flask(__name__)
 app.config.update(config)
 # app.config.from_object(os.environ['APP_SETTINGS'])
@@ -46,6 +43,58 @@ CORS(app)
 
 db = SQLAlchemy(app)
 
+
+class Accel(db.Model):
+    __tablename__ = 'accel'
+
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
+    x = db.Column(db.Float())
+    y = db.Column(db.Float())
+    z = db.Column(db.Float())
+    timestamp = db.Column(db.Float())
+
+    @property
+    def serialize(self):
+        return {'x': self.x, 'y': self.y, 'z': self.z, 'userId': self.userId, 'timestamp': int(self.timestamp)}
+
+    def __repr__(self):
+        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'userId': self.userId, 'timestamp': int(self.timestamp)}
+
+
+class Gyro(db.Model):
+    __tablename__ = 'gyro'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
+    x = db.Column(db.Float())
+    y = db.Column(db.Float())
+    z = db.Column(db.Float())
+    timestamp = db.Column(db.Float())
+
+    @property
+    def serialize(self):
+        return {'x': self.x, 'y': self.y, 'z': self.z, 'userId': self.userId, 'timestamp': int(self.timestamp)}
+
+    def __repr__(self):
+        return "%s" % {'x': self.x, 'y': self.y, 'z': self.z, 'userId': self.userId, 'timestamp': int(self.timestamp)}
+
+
+class StimEvent(db.Model):
+    __tablename__ = 'stimevent'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String())
+    timestamp = db.Column(db.Float())
+
+    @property
+    def serialize(self):
+        return {'userId': self.userId, 'timestamp': int(self.timestamp)}
+
+    def __repr__(self):
+        obj = {'userId': self.userId, 'timestamp': int(self.timestamp)}
+        return "%s" % obj
+
+
+db.create_all()
 predict = Predict()
 ns = NotificationService()
 
@@ -63,16 +112,19 @@ POST REQUESTS
 @app.route('/predict', methods=['POST'])
 def parse_data():
     try:
-        body = json.loads(request.data)
+        # body = json.loads(request.data)
+        body = request.get_json()
+        # print('request predict', body)
 
         accel = body['accel']
         gyro = body['gyro']
         insert = False
-        try:
-            insert = body['insert']
-        except KeyError as e:
-            insert = False
+        # try:
+        #     insert = body['insert']
+        # except KeyError as e:
+        #     insert = False
 
+        userId = '1'
         try:
             userId = body['userId']
         except KeyError as e:
@@ -113,12 +165,14 @@ def parse_data():
 
         test_data = predict.process_data(accel, gyro)
         new_stim = predict.is_new_stim(userId)
+        # print('running prediction on test_data shape', test_data.shape)
+        print("\n%s\n" % test_data[['accel-std-x', 'accel-std-y', 'accel-std-z']])
         prediction = predict.predict_stim(userId, test_data)
         print('new_stim', new_stim)
         if prediction and new_stim:  # if we just had an upward spike
             # We had a stimming event detection, record to softheon using the current time of detection.
             detection_time = int(time.time())
-            stim_event = StimEvent(userId, detection_time)
+            stim_event = StimEvent(userId=userId, timestamp=detection_time)
             print("Stim event created: %s" % stim_event)
             # Broadcast the stim event.
             with app.app_context():
@@ -136,7 +190,7 @@ def parse_data():
 @app.route('/accel', methods=['POST'])
 def parse_accel():
     try:
-        body = json.loads(request.data)
+        body = request.get_json()
         data = body['data']
         print(data)
         data = list(map(lambda val: Accel(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), data))
@@ -152,7 +206,7 @@ def parse_accel():
 @app.route('/gyro', methods=['POST'])
 def parse_gyro():
     try:
-        body = json.loads(request.data)
+        body = request.get_json()
         data = body['data']
         data = list(map(lambda val: Gyro(x=val['x'], y=val['y'], z=val['z'], userId=val['userId'], timestamp=val['timestamp']), data))
         db.session.add_all(data)
@@ -175,9 +229,12 @@ def get_status():
         # from query string
         userId = request.args.get('userId')
         val = 0
+        accel_std = 0
         if userId in predict.last_prediction:
-            val = predict.last_prediction[userId] + 0
-        status_json = {'status': val}
+            last_pred = predict.last_prediction[userId]
+            val = last_pred['pred'] + 0
+            accel_std = last_pred['accel-std']
+        status_json = {'status': val, 'accel-std': accel_std}
         print(status_json)
         return jsonify(status_json)
     except Exception as e:
@@ -255,10 +312,13 @@ def get_gyro_all():
 @app.route('/stim/all')
 def get_stim_all():
     try:
-        # TODO: query by user id.
-        # userId = request.args.get('userId')
-        data = StimEvent.query.all()
+        userId = request.args.get('userId')
+        if userId:
+            data = StimEvent.query.filter_by(userId=userId).all()
+        else:
+            data = StimEvent.query.all()
         records = [i.serialize for i in data]
+        # print('userId', userId, records)
         return jsonify(data=records)
     except Exception as e:
         print(e)
